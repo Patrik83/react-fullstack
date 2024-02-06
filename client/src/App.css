@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 1000px;
+  height: 700px;
+  margin: 0 auto; /* Centrera containern horisontellt */
+}
+.product {
+  width: 300px;
+  height: 400px;
+  text-align: center;
+  border: 1px solid black;
+}
+
+.cart {
+  color: black;
+  font-weight: 700;
+  font-size: 25px;
+  text-align: right;
+  padding-right: 30px;
+}
+
+h3 {
+  color: #007185;
+  font-weight: 700;
+  line-height: 20px;
+  margin: 0;
+  text-align: center;
+}
+
+button {
+background-color: #fbd815;
+width: 13rem;
+padding: .5rem;
+font-size: 1.1em;
+border-radius: 25px;
+border-color: #D5D9D9;
+border-style: solid;
+border-width: 1px;
+}
