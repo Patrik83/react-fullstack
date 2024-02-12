@@ -1,64 +1,39 @@
 import React, { useContext } from 'react';
-import { CartContext } from '../context/CartContext'
+import { CartContext } from '../context/ContextProvider'
 
 export default function Cart() {
+  const { cartItems, addToCart, removeFromCart, getCartTotal } = useContext(CartContext)
 
-const { cartItems, addToCart, removeFromCart, clearCart, getCartTotal } = useContext(CartContext)
-
-return (
+  return (
     <>
-
-<div>
-  <h1>Cart</h1>
-  <div>
-    {cartItems.map((item) => (
-      <div key={item.id}>
-        <div>
-          <img src={item} alt={item.title} />
-          <div>
-            <h1>{item.name}</h1>
-            <p>{item.price}</p>
-          </div>
-        </div>
-        <div>
-          <button
-            onClick={() => {
-              addToCart(item)
-            }}
-          >
-            +
-          </button>
-          <p>{item.quantity}</p>
-          <button
-            onClick={() => {
-              removeFromCart(item)
-            }}
-          >
-            -
-          </button>
-        </div>
-      </div>
-    ))}
-  </div>
-  {
-    cartItems.length > 0 ? (
       <div>
-    <h1>Total: ${getCartTotal()}</h1>
-    <button
-      onClick={() => {
-        clearCart()
-      }}
-    >
-      Rensa karten fi fan
-    </button>
-  </div>
-    ) : (
-      <h1>Carten e ju tom</h1>
-    )
-  }
-</div>
-
-
-      </>
-    )
-  }
+        <h1>Varukorgen</h1>
+        <div>
+          {cartItems.map((item) => (
+            <div key={item.id}>
+              <img src={`/images/${item.Images[0].imageUrl}`} alt={`Bild 1`} />
+              <h2>{item.name}
+              <br />
+              {item.price}
+              </h2><div>
+                <button onClick={() => addToCart(item)}>+</button>
+                <h2>{item.quantity}</h2>
+                <button onClick={() => removeFromCart(item.id)}>-</button>
+              </div>
+            </div>
+          ))}
+        </div>
+        {
+          cartItems.length > 0 ? (
+            <div>
+              <h1>Total summa: {getCartTotal(cartItems)} kr</h1>
+              {/* Här kan man lägga till en cart-total funktion & cart-clear*/}
+            </div>
+          ) : (
+            <h1>Cart is Empty</h1>
+          )
+        }
+      </div>
+    </>
+  )
+}

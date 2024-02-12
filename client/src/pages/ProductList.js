@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getProducts } from "../services/ApiService";
-import { CartContext } from "../context/CartContext";
+import { CartContext } from "../context/ContextProvider";
 
 export default function ProductList() {
   const [listOfProducts, setListOfProducts] = useState([]);
-  const { cartItems, addToCart } = useContext(CartContext);
+  const { addToCart } = useContext(CartContext);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -30,10 +30,6 @@ export default function ProductList() {
         <h3>Loading ...</h3>
       ) : (
         <>
-          <div>
-            
-              <Link to="/cart">Cart ({cartItems.length})</Link>
-          </div>
           <div className="container">
             {listOfProducts.map((product) => (
               <div className="product" key={product.id}>
