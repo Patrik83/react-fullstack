@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getProducts } from "../services/ApiService";
-import { CartContext } from "../context/ContextProvider";
+import { CartContext } from "../context/CartManager";
+
 
 export default function ProductList() {
-  const [listOfProducts, setListOfProducts] = useState([]);
   const { addToCart } = useContext(CartContext);
+  const [listOfProducts, setListOfProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export default function ProductList() {
         <>
           <div className="container">
             {listOfProducts.map((product) => (
-              <div className="product" key={product.id}>
+              <div className="product" key={product.id} >
                 <Link to={`/product/${product.id}`}>
                   <img src={`/images/${product.Images[0].imageUrl}`} alt={`Bild 1`} />
                   <h3>{product.name}</h3>

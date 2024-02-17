@@ -1,7 +1,10 @@
 import React, { useContext } from 'react';
-import { CartContext } from '../context/ContextProvider'
+import { CartContext } from "../context/CartManager";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 
 export default function Cart() {
+  // Extract the functions from the Context
   const { cartItems, addToCart, removeFromCart, getCartTotal } = useContext(CartContext)
 
   return (
@@ -16,9 +19,9 @@ export default function Cart() {
               <br />
               {item.price}
               </h2><div>
-                <button onClick={() => addToCart(item)}>+</button>
+                <button onClick={() => addToCart(item)}><AddCircleIcon/></button>
                 <h2>{item.quantity}</h2>
-                <button onClick={() => removeFromCart(item.id)}>-</button>
+                <button onClick={() => removeFromCart(item.id)}><RemoveCircleIcon/></button>
               </div>
             </div>
           ))}
@@ -27,7 +30,6 @@ export default function Cart() {
           cartItems.length > 0 ? (
             <div>
               <h1>Total summa: {getCartTotal(cartItems)} kr</h1>
-              {/* Här kan man lägga till en cart-total funktion & cart-clear*/}
             </div>
           ) : (
             <h1>Cart is Empty</h1>
