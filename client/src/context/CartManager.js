@@ -19,43 +19,49 @@ export const CartProvider = ({ children }) => {
   const addToCart = (newItem) => {
     const itemExistsInCart = cartItems.find((item) => item.id === newItem.id);
 
+    // Uppdatera kvantiteten om produkten redan finns i kundvagnen
     if (itemExistsInCart) {
       setCartItems((prevItems) =>
         prevItems.map((item) =>
-          item.id === newItem.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.id === newItem.id ? { ...item, amount: item.amount + 1 } : item
         )
       );
       
+    // Lägg annars till en ny produkt
     } else {
-      setCartItems((prevItems) => [...prevItems, { ...newItem, quantity: 1 }]);
+      setCartItems((prevItems) => [...prevItems, { ...newItem, amount: 1 }]);
     }
   }
 
   const removeFromCart = (itemToRemove) => {
     setCartItems((prevItems) => {
-      // Hitta den aktuella produkten i kundvagnen
+      // Sök efter den aktuella produkten i kundvagnen
       const currentItem = prevItems.find((item) => item.id === itemToRemove);
   
-      // Om produkten inte finns, returnera oförändrad kundvagn
+      // Om produkten inte finns, returnera en oförändrad kundvagn
       if (!currentItem) {
         return prevItems;
       }
   
-      // Om produkten har en kvantitet större än 1, minska kvantiteten med 1
-      if (currentItem.quantity > 1) {
+      // Om det finns fler än 1 produkt, ta bort en
+      if (currentItem.amount > 1) {
         return prevItems.map((item) =>
-          item.id === itemToRemove ? { ...item, quantity: item.quantity - 1 } : item
+          item.id === itemToRemove ? { ...item, amount: item.amount - 1 } : item
         );
       }
   
-      // Om produkten har kvantitet 1, ta bort den från kundvagnen
+      // Om det bara finns produkt, ta bort den
       return prevItems.filter((item) => item.id !== itemToRemove);
     });
   };
   
   const getCartTotal = () => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cartItems.reduce((total, item) => total + item.price * item.amount, 0);
   };
+
+  const cartItemCount = () => {
+    return cartItems.reduce((total, item) => total + item.amount, 0);
+  }
 
   return (
     <CartContext.Provider 
@@ -63,7 +69,8 @@ export const CartProvider = ({ children }) => {
         cartItems, 
         addToCart, 
         removeFromCart, 
-        getCartTotal }}
+        getCartTotal,
+        cartItemCount }}
       >
         {children}
     </CartContext.Provider>

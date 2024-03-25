@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getProducts } from "../services/ApiService";
-import { CartContext } from "../context/CartManager";
-
+import { getProducts } from "../../services/ApiService";
+import { CartContext } from "../../context/CartManager";
 
 export default function ProductList() {
   const { addToCart } = useContext(CartContext);
@@ -31,18 +30,19 @@ export default function ProductList() {
         <h3>Loading ...</h3>
       ) : (
         <>
-          <div className="container">
+          <main className="container">
             {listOfProducts.map((product) => (
-              <div className="product" key={product.id} >
+              <article className="productCard" key={product.id} >
                 <Link to={`/product/${product.id}`}>
                   <img src={`/images/${product.Images[0].imageUrl}`} alt={`Bild 1`} />
+                  <h3>{product.Categories[0].name}</h3>
                   <h3>{product.name}</h3>
                   <p>{product.price}</p>
                 </Link>
                 <button onClick={() => addToCart(product)}>Add to cart</button>
-              </div>
+              </article>
             ))}
-          </div>
+          </main>
         </>
       )}
     </>

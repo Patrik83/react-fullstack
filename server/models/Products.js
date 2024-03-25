@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Products.associate = (models) => {
         Products.hasMany(models.Images);
+        Products.belongsToMany(models.Categories, { through: 'product_categories' });
     };
 
     return Products;

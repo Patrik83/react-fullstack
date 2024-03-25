@@ -1,0 +1,42 @@
+.cartWrapper {
+  display: grid;
+  grid-template-columns: 1fr 300px; /* Två columns där den vänstra tar upp allt utrymme som blir över efter 300px som den högra använder */
+  grid-template-rows: auto; /* En rad för varje artikel */
+  grid-gap: 1rem;
+  max-width: 1000px;
+  margin: 3rem auto;
+}
+
+.cartLeftBox {
+  display: grid;
+  grid-gap: 1rem;
+  grid-column: 1;
+  grid-row: 1; /* Första raden */
+}
+
+.cartRightBox {
+  grid-column: 2;
+  grid-row: 1; /* Första raden */
+  position: sticky;
+  top: 5.5rem;
+  align-self: start;
+  border: 1px solid black;
+}
+
+.cartItem {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto; /* En rad för varje artikel */
+  border: 1px solid black;
+  padding: 5px;
+}
+
+.itemDetails {
+  grid-column: 2; /* Placera itemDetails i andra kolumnen */
+  grid-row: 1; /* Första raden */
+}
+
+.itemButtons {
+  grid-column: 2; /* Placera itemButtons i andra kolumnen */
+  grid-row: 2; /* Andra raden */
+}

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
-import ImageViewer from "../shared/ImageViewer";
-import { getProductById } from "../services/ApiService";
+import ProductImageViewer from "../../shared/ImageViewer";
+import { getProductById } from "../../services/ApiService";
 
 const ShowProducts = () => {
   let { productId } = useParams();
@@ -24,7 +24,7 @@ const ShowProducts = () => {
   return (
     <div>
       <h2>{productObject.name}</h2>
-      <ImageViewer images={productObject.Images} />
+      <ProductImageViewer images={productObject.Images} />
       <p>{productObject.price}</p>
     </div>
   );

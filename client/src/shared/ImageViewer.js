@@ -1,19 +1,27 @@
 import React, {useState} from "react";
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import "../App.css";
 
-const ImageViewer = ({ images }) => {
+const ProductImageViewer = ({ images }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  
-    const showNextImage = () => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-    };
+
+    const handleDotClick = (index) => {
+      setCurrentImageIndex(index);
+    }
   
     return (
       <div>
         {images && images.length > 0 ? (
           <div>
             <img src={`/images/${images[currentImageIndex].imageUrl}`} alt={`Bild ${currentImageIndex + 1}`} />
-            <button onClick={showNextImage}><ArrowRightIcon /></button>
+            <div>
+            {images.map((image, index) => (
+              <span
+                key={index}
+                className={`dot ${index === currentImageIndex ? "active" : ""}`}
+                onClick={() => handleDotClick(index)}
+              />
+            ))}
+          </div>
           </div>
         ) : (
           <p>Inga bilder tillgängliga</p>
@@ -22,5 +30,5 @@ const ImageViewer = ({ images }) => {
     );
   };
 
-  export default ImageViewer;
+  export default ProductImageViewer;
   

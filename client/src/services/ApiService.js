@@ -20,3 +20,21 @@ export const getProductById = async (productId) => {
     throw error;
   }
 };
+
+export const getProductsByCategory = async (categoryName) => {
+  try {
+    const response = await axios.get(`${apiUrl}/category/${categoryName}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const searchProducts = async (searchQuery) => {
+  try {
+    const response = await axios.get(`${apiUrl}?search=${searchQuery}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
