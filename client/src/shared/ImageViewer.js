@@ -1,34 +1,25 @@
-import React, {useState} from "react";
-import "../App.css";
+import React from "react";
+import style from "../components/productitem/ProductItem.module.css";
 
-const ProductImageViewer = ({ images }) => {
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-    const handleDotClick = (index) => {
-      setCurrentImageIndex(index);
-    }
-  
-    return (
-      <div>
-        {images && images.length > 0 ? (
-          <div>
-            <img src={`/images/${images[currentImageIndex].imageUrl}`} alt={`Bild ${currentImageIndex + 1}`} />
-            <div>
-            {images.map((image, index) => (
-              <span
-                key={index}
-                className={`dot ${index === currentImageIndex ? "active" : ""}`}
-                onClick={() => handleDotClick(index)}
-              />
-            ))}
-          </div>
-          </div>
-        ) : (
-          <p>Inga bilder tillgängliga</p>
-        )}
-      </div>
-    );
+const ImageViewer = ({ images, onImageClick }) => {
+  const handleImageClick = (index) => {
+    onImageClick(index); // Skicka det nya indexet till förälderkomponenten
   };
 
-  export default ProductImageViewer;
-  
+  return (
+    <div className={style.imageList}>
+      {images.map((image, index) => (
+        <img
+          key={index}
+          src={`/images/${image.imageUrl}`}
+          alt={`Bild ${index + 1}`}
+          className={style.imgSmall}
+          style={{ cursor: "pointer" }}
+          onClick={() => handleImageClick(index)}
+        />
+      ))}
+    </div>
+  );
+};
+
+export default ImageViewer;

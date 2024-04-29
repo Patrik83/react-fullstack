@@ -2,11 +2,10 @@ import React, { useContext } from 'react';
 import { CartContext } from "../../context/CartManager";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import style from "./Cart.module.css";
+import style from "./CartPage.module.css";
 
-export default function Cart() {
-  // Extrahera funktionerna från Context
-  const { cartItems, addToCart, removeFromCart, getCartTotal } = useContext(CartContext)
+export default function CartPage() {
+  const { cartItems, addToCart, removeFromCart, getCartTotal, clearCart } = useContext(CartContext)
 
   // Beräkna totalt antal varor i kundvagnen
   const cartItemCount = cartItems.reduce((total, item) => total + item.amount, 0);
@@ -14,6 +13,7 @@ export default function Cart() {
     <>
       <main className={style.cartWrapper}>
         <section className={style.cartLeftBox}>
+        {cartItems.length === 0 && <h1>Varukorgen är tom</h1>}
           {cartItems.map((item) => (
             <article className={style.cartItem} key={item.id}>
                 <img src={`/images/${item.Images[0].imageUrl}`} alt={`Bild 1`} />
@@ -32,12 +32,18 @@ export default function Cart() {
         <aside className={style.cartRightBox}>
           {cartItems.length > 0 ? (
             <>
-              <p>Totalsumma {getCartTotal(cartItems)} kr</p>
+              <p>Totalsumma {getCartTotal()} kr</p>
               <br />
               <p>Antal varor i Varukorgen: {cartItemCount}</p>
+              <br />
+              <button onClick={() => clearCart()}>Töm Varukorgen</button>
             </>
           ) : (
-            <h1>Varukorgen är tom</h1>
+            <>
+              <p>Totalsumma {getCartTotal()} kr</p>
+              <br />
+              <p>Antal varor i Varukorgens: {cartItemCount}</p>
+            </>
           )}
         </aside>
       </main>

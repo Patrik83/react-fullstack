@@ -1,0 +1,77 @@
+/* Gemensamma inställningar för både sökfältet och resultatcontainern */
+.searchWrapper {
+  position: relative;
+  margin-left: 10px;
+}
+
+/* Behåll sökfältet synlig även när det inte är i fokus */
+.searchWrapper:focus-within .searchinput {
+  width: 300px;
+}
+
+/* Behåll resultatcontainern synlig även när den inte är i fokus */
+.searchWrapper:focus-within .resultsContainer {
+  display: block;
+  background-color: #fff;
+  width: 300px;
+  height: 250px;
+  border: 1px solid black;
+}
+
+/* Inställningar för sökfältet (innan fokusering) */
+.searchinput {
+  position:absolute;
+  border: 0;
+  border-left: 1px solid black;
+  outline: none; /* Ta bort standard fokusramen */
+  padding-left: 10px; /*  positionen på "Sök..." texten */
+  margin-right: 20px;
+  right:0;
+  transition: 
+    width 0.3s ease, 
+    height 1s ease, 
+    margin-left 0.3s ease, 
+    text-align 0.3s ease;
+  width: 150px;
+  height: 30px;
+}
+
+/* Inställningar för dolda resultatcontainern (innan fokusering) */
+.resultsContainer {
+  display: none; /* Dölj resultatcontainern som standard */
+  position: absolute;
+  margin-right: 20px;
+  /* top: 100%; */
+  right: 0;
+  overflow: hidden;
+  transition: 
+    width 0.3s ease,
+    height 0.3s ease;
+  width: 150px;
+  height: 0px;
+}
+
+/* Inställningar för listan av resultat */
+.resultsList {
+  list-style: none;
+}
+
+.resultsList li {
+  padding: 10px;
+  text-align: left;
+}
+
+/* Media query för skärmstorlek mindre än 600px */
+@media (max-width: 600px) {
+  .searchWrapper:focus-within .searchinput,
+  .searchWrapper:focus-within .resultsContainer {
+    width: 399px;
+    /* margin-left: 0; */
+  }
+
+  .searchWrapper .searchinput, .resultsContainer {
+    width: 399px;
+    right: 0;
+    border: 0;
+  }
+}

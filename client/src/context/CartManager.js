@@ -1,74 +1,76 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useReducer, useEffect } from "react";
 
 export const CartContext = createContext();
 
 const LOCAL_STORAGE_KEY = 'cartItems';
 
+const cartReducer = (state, action) => {
+  switch (action.type) {
+    case 'ADD_TO_CART':
+      const itemExistsInCart = state.find((item) => item.id === action.payload.id);
+      if (itemExistsInCart) {
+        return state.map((item) =>
+          item.id === action.payload.id ? { ...item, amount: item.amount + 1 } : item
+        );
+      } else {
+        return [...state, { ...action.payload, amount: 1 }];
+      }
+    case 'REMOVE_FROM_CART':
+      const currentItem = state.find((item) => item.id === action.payload);
+      if (!currentItem) {
+        return state;
+      }
+      if (currentItem.amount > 1) {
+        return state.map((item) =>
+          item.id === action.payload ? { ...item, amount: item.amount - 1 } : item
+        );
+      }
+      return state.filter((item) => item.id !== action.payload);
+    case 'CLEAR_CART':
+      localStorage.clear();
+      return [];
+    default:
+      return state;
+  }
+};
+
 export const CartProvider = ({ children }) => {
-  // Hämta kundvagnsdatan från localStorage när komponenten monteras
-  const [cartItems, setCartItems] = useState(() => {
+  const [cartItems, dispatch] = useReducer(cartReducer, [], () => {
     const savedCartItems = localStorage.getItem(LOCAL_STORAGE_KEY);
     return savedCartItems ? JSON.parse(savedCartItems) : [];
   });
 
-  // Spara kundvagnsdatan till localStorage varje gång cartItems uppdateras
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const addToCart = (newItem) => {
-    const itemExistsInCart = cartItems.find((item) => item.id === newItem.id);
-
-    // Uppdatera kvantiteten om produkten redan finns i kundvagnen
-    if (itemExistsInCart) {
-      setCartItems((prevItems) =>
-        prevItems.map((item) =>
-          item.id === newItem.id ? { ...item, amount: item.amount + 1 } : item
-        )
-      );
-      
-    // Lägg annars till en ny produkt
-    } else {
-      setCartItems((prevItems) => [...prevItems, { ...newItem, amount: 1 }]);
-    }
-  }
-
-  const removeFromCart = (itemToRemove) => {
-    setCartItems((prevItems) => {
-      // Sök efter den aktuella produkten i kundvagnen
-      const currentItem = prevItems.find((item) => item.id === itemToRemove);
-  
-      // Om produkten inte finns, returnera en oförändrad kundvagn
-      if (!currentItem) {
-        return prevItems;
-      }
-  
-      // Om det finns fler än 1 produkt, ta bort en
-      if (currentItem.amount > 1) {
-        return prevItems.map((item) =>
-          item.id === itemToRemove ? { ...item, amount: item.amount - 1 } : item
-        );
-      }
-  
-      // Om det bara finns produkt, ta bort den
-      return prevItems.filter((item) => item.id !== itemToRemove);
-    });
+  const addToCart = (item) => {
+    dispatch({ type: 'ADD_TO_CART', payload: item });
   };
-  
+
+  const removeFromCart = (itemId) => {
+    dispatch({ type: 'REMOVE_FROM_CART', payload: itemId });
+  };
+
+  const clearCart = () => {
+    dispatch({ type: 'CLEAR_CART' });
+  };
+
   const getCartTotal = () => {
     return cartItems.reduce((total, item) => total + item.price * item.amount, 0);
   };
 
   const cartItemCount = () => {
     return cartItems.reduce((total, item) => total + item.amount, 0);
-  }
+  };
 
   return (
     <CartContext.Provider 
       value={{ 
         cartItems, 
         addToCart, 
-        removeFromCart, 
+        removeFromCart,
+        clearCart, 
         getCartTotal,
         cartItemCount }}
       >

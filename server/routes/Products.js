@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { Products, Images, Categories } = require("../models"); // Lägg till Categories
+const { Products, Images, Categories } = require("../models");
 
 // Hämta alla produkter med dess bilder och eventuella kategorier
 router.get("/", async (req, res) => {
   try {
     const listOfProducts = await Products.findAll({ 
-      include: [{ model: Images }, { model: Categories }] // Inkludera Images och Categories
+      include: [{ model: Images }, { model: Categories }] // Inkludera tabellerna images och categories
     });
     res.json(listOfProducts);
   } catch (error) {
@@ -15,12 +15,12 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Hämta specifik produkt med dess bilder och eventuella kategorier
+// Hämta en specifik produkt med dess bilder och eventuella kategorier
 router.get("/:productId", async (req, res) => {
   const productId = req.params.productId;
   try {
     const product = await Products.findByPk(productId, { 
-      include: [{ model: Images }, { model: Categories }] // Inkludera Images och Categories
+      include: [{ model: Images }, { model: Categories }] // Inkludera tabellerna images och categories
     });
     res.json(product);
   } catch (error) {
@@ -29,13 +29,14 @@ router.get("/:productId", async (req, res) => {
   }
 });
 
-router.get("/category/:categoryName", async (req, res) => { // Använd /category/:categoryName istället för /:categoryName
+// Hämta produkter efter kategori
+router.get("/category/:categoryName", async (req, res) => { // Använd /category/:categoryName istället för endast /:categoryName
   const categoryName = req.params.categoryName;
   try {
     // Hämta alla produkter som tillhör den angivna kategorin från databasen
     const productsInCategory = await Products.findAll({
       include: [
-        { model: Categories, where: { name: categoryName } }, { model: Images }]
+        { model: Categories, where: { name: categoryName } }, { model: Images }] // Inkludera tabellerna images och categories
     });
     res.json(productsInCategory);
   } catch (error) {
@@ -44,16 +45,14 @@ router.get("/category/:categoryName", async (req, res) => { // Använd /category
   }
 });
 
+/*
 // Sök efter produkter vars namn börjar med en viss sökterm
 router.get("/search/:searchTerm", async (req, res) => {
+  const searchTerm = req.params.searchTerm;
   try {
-    const searchTerm = req.params.searchTerm;
     const products = await Products.findAll({
-      where: {
-        name: { $iLike: `${searchTerm}%` } // Produktnamn börjar med söktermen (fallkänslig)
-        // Om du vill att sökningen ska vara fallkänslig, använd $like istället för $iLike
-      },
-      include: [{ model: Images }, { model: Categories }] // Inkludera Images och Categories
+      include: [
+        { model: Categories, where: { name: searchTerm } }, { model: Images }]
     });
     res.json(products);
   } catch (error) {
@@ -61,5 +60,6 @@ router.get("/search/:searchTerm", async (req, res) => {
     res.status(500).json({ error: "Could not search products" });
   }
 });
+*/
 
 module.exports = router;

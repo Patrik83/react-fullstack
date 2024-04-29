@@ -1,0 +1,15 @@
+.categoryWrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    grid-gap: 3rem;
+    max-width: 1000px;
+    margin: 1rem auto;
+  }
+  
+  .categoryCard {
+    border: 1px solid black;
+    padding: 20px;
+    text-align: center;
+  }
+  

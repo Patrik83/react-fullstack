@@ -1,12 +1,11 @@
 import "./App.css";
 import React from "react";
 import { BrowserRouter, Routes, Route} from "react-router-dom";
-import ProductDetail from "./pages/productdetail/ProductDetail";
-import ProductList from "./pages/productlist/ProductList";
-import Cart from "./pages/cart/Cart";
-import Header from "./pages/header/Header";
-import { Search } from "./pages/Search";
-import { CategoryPage } from "./pages/Categories";
+import ProductDetailPage from "./pages/productdetail/ProductDetailPage";
+import CartPage from "./pages/cart/CartPage";
+import Header from "./components/header/Header";
+import CategoryPage from "./pages/category/CategoryPage";
+import HomePage from "./pages/home/HomePage";
 
 const App = () => {
 
@@ -14,11 +13,10 @@ const App = () => {
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path="/" element={<ProductList />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/category/:categoryName" element={<CategoryPage />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/product/:productId" element={<ProductDetail />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/product/:productId" element={<ProductDetailPage />} />
       </Routes>
   </BrowserRouter>
   );

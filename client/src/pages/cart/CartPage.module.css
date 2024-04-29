@@ -4,19 +4,19 @@
   grid-template-rows: auto; /* En rad för varje artikel */
   grid-gap: 1rem;
   max-width: 1000px;
-  margin: 3rem auto;
+  margin: 1rem auto;
 }
 
 .cartLeftBox {
   display: grid;
   grid-gap: 1rem;
   grid-column: 1;
-  grid-row: 1; /* Första raden */
+  grid-row: 1; /* Första raden från vänster*/
 }
 
 .cartRightBox {
   grid-column: 2;
-  grid-row: 1; /* Första raden */
+  grid-row: 1; /* Första raden från vänster*/
   position: sticky;
   top: 5.5rem;
   align-self: start;
@@ -33,10 +33,10 @@
 
 .itemDetails {
   grid-column: 2; /* Placera itemDetails i andra kolumnen */
-  grid-row: 1; /* Första raden */
+  grid-row: 1; /* Första raden från vänster*/
 }
 
 .itemButtons {
   grid-column: 2; /* Placera itemButtons i andra kolumnen */
-  grid-row: 2; /* Andra raden */
+  grid-row: 2; /* Andra raden från vänster */
 }
