@@ -3,7 +3,7 @@ const router = express.Router();
 const { Products, Images, Categories } = require("../models");
 
 // Hämta alla produkter med dess bilder och eventuella kategorier
-router.get("/", async (req, res) => {
+router.get("/products", async (req, res) => {
   try {
     const listOfProducts = await Products.findAll({ 
       include: [{ model: Images }, { model: Categories }] // Inkludera tabellerna images och categories
@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 });
 
 // Hämta en specifik produkt med dess bilder och eventuella kategorier
-router.get("/:productId", async (req, res) => {
+router.get("/products/:productId", async (req, res) => {
   const productId = req.params.productId;
   try {
     const product = await Products.findByPk(productId, { 
@@ -29,9 +29,24 @@ router.get("/:productId", async (req, res) => {
   }
 });
 
+// Hämta alla kategorier
+router.get("/categories", async (req, res) => {
+  try {
+    const listOfCategoryNames = await Categories.findAll({
+      attributes: ['name'], // Endast hämta namnen på kategorierna
+    });
+
+    res.json(listOfCategoryNames);
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    res.status(500).json({ error: "Could not fetch categories" });
+  }
+});
+
 // Hämta produkter efter kategori
-router.get("/category/:categoryName", async (req, res) => { // Använd /category/:categoryName istället för endast /:categoryName
+router.get("/categories/:categoryName", async (req, res) => {
   const categoryName = req.params.categoryName;
+  console.log("Received category name:", categoryName);
   try {
     // Hämta alla produkter som tillhör den angivna kategorin från databasen
     const productsInCategory = await Products.findAll({
@@ -45,21 +60,28 @@ router.get("/category/:categoryName", async (req, res) => { // Använd /category
   }
 });
 
-/*
-// Sök efter produkter vars namn börjar med en viss sökterm
-router.get("/search/:searchTerm", async (req, res) => {
-  const searchTerm = req.params.searchTerm;
+// Hämta en specifik produkt inom en viss kategori
+router.get("/categories/:categoryName/:productName", async (req, res) => {
+  const { categoryName, productName } = req.params;
+  console.log("Received category name:", categoryName);
+  console.log("Received product name:", productName);
   try {
-    const products = await Products.findAll({
+    // Hämta den specifika produkten som tillhör den angivna kategorin från databasen
+    const product = await Products.findOne({
       include: [
-        { model: Categories, where: { name: searchTerm } }, { model: Images }]
+        { 
+          model: Categories, 
+          where: { name: categoryName } 
+        }, 
+        { model: Images }
+      ],
+      where: { name: productName }
     });
-    res.json(products);
+    res.json(product);
   } catch (error) {
-    console.error("Error searching products:", error);
-    res.status(500).json({ error: "Could not search products" });
+    console.error("Error fetching product from category:", error);
+    res.status(500).json({error: "Could not fetch product from category" });
   }
 });
-*/
 
 module.exports = router;

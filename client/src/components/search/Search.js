@@ -1,66 +1,88 @@
 import React, { useState, useCallback } from "react";
-import { getProductsByCategory, getProducts } from "../../services/ApiService";
+import { getProducts, getCategories } from "../../services/ApiService";
 import { Link } from "react-router-dom";
 import SearchIcon from '@mui/icons-material/Search';
 import styles from "./Search.module.css";
+import useApi from "../../hooks/useApi";    
 
-export const Search = () => {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState('all');
+const Search = () => {
+    // State för sökord, vald kategori och sökresultat
+    const [inputValue, setInputValue] = useState('');
+    const [selectedOption, setSelectedOption] = useState('all');
     const [results, setResults] = useState([]);
 
+    const { data: categories, loaded } = useApi(`http://localhost:3001/categories`);
+
+    // Funktion för att hantera sökningar
     const handleSearch = useCallback(async (event) => {
-        const term = event.target.value.trim();
-        setSearchTerm(term);
-        if (term === '') {
+        const searchValue = event.target.value.trim().toLowerCase();
+        setInputValue(searchValue);
+        if (searchValue === '') {
             setResults([]);
             return;
         }
         try {
-            let filteredResults = [];
-            if (selectedCategory === 'all') {
-                const allProducts = await getProducts();
-                filteredResults = allProducts.filter(result =>
-                    result.name.toLowerCase().includes(term.toLowerCase()));
+            let searchResults = [];
+            if (selectedOption === 'all') {
+                const responseData = await getProducts();
+                searchResults = responseData.filter(item =>
+                    item.name.toLowerCase().includes(searchValue));
             } else {
-                const categoryProducts = await getProductsByCategory(selectedCategory);
-                filteredResults = categoryProducts.filter(result =>
-                    result.name.toLowerCase().includes(term.toLowerCase()));
-            }
-            setResults(filteredResults);
+                const responseData = await getCategories(selectedOption);
+                searchResults = responseData.filter(item =>
+                    item.name.toLowerCase().includes(searchValue));
+            }   
+                setResults(searchResults);
         } catch (error) {
             console.error("Error fetching products:", error);
         }
-    }, [selectedCategory]);
+    }, [selectedOption]);
 
-    const handleCategoryChange = async (event) => {
+    // Funktion för att hantera kategorival
+    const handleChange = async (event) => {
         const category = event.target.value;
-        setSelectedCategory(category);
+        setSelectedOption(category);
+        console.log("Option selected:", category)
+
         // Rensa sökfält och sökresultat vid nytt kategorival
-        setSearchTerm('');
+        setInputValue('');
         setResults([]);
     };
 
+    // Funktion för att hantera klick på sökresultatet
     const handleClick = () => {
-        setSearchTerm('');
+        setInputValue('');
         document.activeElement.blur();
     };
 
+    if (!loaded) {
+        return <div>Laddar...</div>
+    }
+
     return (
         <div className={styles.searchWrapper}>
+            {/* Sökfält */}
             <input
+                className={styles.searchinput}
                 type="text"
                 placeholder="Sök..."
-                value={searchTerm}
+                value={inputValue}
                 onChange={handleSearch}
-                className={styles.searchinput}
             />
-            <select style={{border: "1px solid black", backgroundColor: "#fff", height: "30px", width: "20px"}} value={selectedCategory} onChange={handleCategoryChange}>
+            {/* Kategoriväljare */}
+            <select 
+                className={styles.searchDropdown}
+                value={selectedOption} 
+                onChange={handleChange}
+            >
+            {/* Visar alla kategorier */}
                 <option value="all">Alla</option>
-                <option value="Tröjor">Tröjor</option>
-                <option value="Telefoner">Telefoner</option>
+                {categories.map((category, index) => (
+                    <option key={index} value={category.name}>{category.name}</option>
+                ))}
             </select>
 
+            {/* Visa sökresultat om det finns */}
             {results.length > 0 && (
                 <div className={styles.resultsContainer}>
                     <ul className={styles.resultsList}>
@@ -78,3 +100,5 @@ export const Search = () => {
         </div>
     );
 };
+
+export default Search;

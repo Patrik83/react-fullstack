@@ -11,7 +11,7 @@ const db = require("./models");
 
 // Routers
 const productRouter = require("./routes/Products");
-app.use("/products", productRouter);
+app.use("/", productRouter);
 
 const PORT = process.env.PORT || 3001;
 
