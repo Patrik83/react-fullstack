@@ -5,19 +5,19 @@ import style from "./ProductItem.module.css";
 
 const ProductItem = ({ product }) => {
     const { addToCart } = useContext(CartContext);
-    const [selectedImageIndex, setSelectedImageIndex] = useState(0); // Lägg till selectedImageIndex
+    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   return (
     <main className={style.productWrapper}>
-          <section className={style.LeftBox}>
+          <section className={style.ThumbNails}>
             <ImageViewer images={product.Images} onImageClick={setSelectedImageIndex} />
           </section>
 
-          <div className={style.CenterBox}>
+          <div className={style.BigImage}>
             {product.Images && product.Images.length > 0 && (
               <picture>
                 <img
-                  src={`/images/${product.Images[selectedImageIndex].imageUrl}`} // Använd selectedImageIndex här
+                  src={`/images/${product.Images[selectedImageIndex].imageUrl}`}
                   alt={`Bild ${selectedImageIndex + 1}`}
                   className={style.img}
                 />
@@ -25,10 +25,10 @@ const ProductItem = ({ product }) => {
             )}
           </div>
 
-          <aside className={style.RightBox}>
+          <aside className={style.Details}>
             <h2>{product.name}</h2>
             <p>{product.price} kr</p>
-            <div style={{ position: "absolute", bottom: "0" }}>
+            <div>
               <button onClick={() => addToCart(product)}>Handla</button>
             </div>
           </aside>

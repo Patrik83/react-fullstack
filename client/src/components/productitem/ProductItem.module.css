@@ -7,7 +7,7 @@
     margin: 1rem auto;
   }
   
-  .LeftBox {
+  .ThumbNails {
     display: grid;
     grid-row: 1; /* Första raden från vänster*/
     grid-gap: 1rem;
@@ -16,7 +16,7 @@
     top: 5.5rem;
   }
   
-  .CenterBox {
+  .BigImage {
     grid-column: 2;
     grid-row: 1; /* Första raden från vänster*/
     position: sticky;
@@ -25,14 +25,25 @@
     border: 1px solid black;
   }
 
-  .RightBox {
+  .BigImage picture {
+    position: absolute;
+    top: 25%;
+    left: 200px
+  }
+
+  .Details {
     grid-column: 3;
     grid-row: 1; /* Första raden från vänster*/
     border: 1px solid black;
     margin-left: 50px;
     position: relative;
   }
-  
+
+  .Details div {
+    position: absolute;
+    bottom: 0;
+  }
+
   .productImg {
     display: grid;
     grid-template-columns: auto 1fr;
