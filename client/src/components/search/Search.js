@@ -11,6 +11,7 @@ const Search = () => {
     const [selectedOption, setSelectedOption] = useState('all');
     const [results, setResults] = useState([]);
 
+    // customhook from useApi till att mappa alla kategorier som finns i databasen
     const { data: categories, loaded } = useApi(`http://localhost:3001/categories`);
 
     // Funktion för att hantera sökningar
@@ -23,11 +24,13 @@ const Search = () => {
         }
         try {
             let searchResults = [];
+            // Om alla kategorier är valda
             if (selectedOption === 'all') {
                 const responseData = await getProducts();
                 searchResults = responseData.filter(item =>
                     item.name.toLowerCase().includes(searchValue));
             } else {
+            // Om en specifik kategori är vald
                 const responseData = await getCategories(selectedOption);
                 searchResults = responseData.filter(item =>
                     item.name.toLowerCase().includes(searchValue));

@@ -9,11 +9,11 @@ const ProductItem = ({ product }) => {
 
   return (
     <main className={style.productWrapper}>
-          <section className={style.ThumbNails}>
+          <section className={style.imgThumb}>
             <ImageViewer images={product.Images} onImageClick={setSelectedImageIndex} />
           </section>
 
-          <div className={style.BigImage}>
+          <div className={style.pictureWrapper}>
             {product.Images && product.Images.length > 0 && (
               <picture>
                 <img
@@ -25,7 +25,7 @@ const ProductItem = ({ product }) => {
             )}
           </div>
 
-          <aside className={style.Details}>
+          <aside className={style.productDetails}>
             <h2>{product.name}</h2>
             <p>{product.price} kr</p>
             <div>

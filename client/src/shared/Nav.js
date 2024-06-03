@@ -25,6 +25,7 @@ export function Nav() {
   return (
     <nav className="navWrapper">
       <div className={`topnav ${showMenu && "menuOpened"}`} id="myTopnav">
+      <Link to="/admin" onClick={() => setShowMenu(!showMenu)}>Admin</Link>
         <Link to="/" onClick={() => setShowMenu(!showMenu)}>Startsida</Link>
         {loaded && categories.map((category, index) => (
           <Link key={index} to={`/categories/${category.name}`} onClick={() => setShowMenu(!showMenu)}>

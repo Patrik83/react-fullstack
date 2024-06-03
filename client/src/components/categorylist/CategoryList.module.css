@@ -8,25 +8,27 @@
     position: relative;
   }
   
-  .categoryCard {
-    padding: 20px 0 0;
-    text-align: center;
-    background-color: #F5F5ED;
-  }
+h1 {
+  font-size: 40px;
+}
+
+ .categoryCard {
+  padding: 20px 0 0;
+  text-align: center;
+  background-color: #F5F5ED;
+}
   
-  .categoryCard div {
-    text-align: left;
-    background-color: #FFFEFA;
-    position: absolute;
-  }
+.categoryCard div {
+  text-align: left;
+  background-color: #FFFEFA;
+  position: absolute;
+}
 
-  .categoryCard a {
-    text-decoration: none;
-  }
+.categoryCard a {
+  text-decoration: none;
+}
 
-  /* Media query för skärmstorlek mindre än 600px */
 @media (max-width: 600px) {
-
   .container {
     grid-template-columns: repeat(2, 1fr);
     padding: 0px;

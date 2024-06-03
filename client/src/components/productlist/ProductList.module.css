@@ -14,19 +14,17 @@
   background-color: #F5F5ED;
 }
 
+.productCard a {
+  text-decoration: none;
+}
+
 .productCard div {
   text-align: left;
   background-color: #FFFEFA;
   position: absolute;
 }
 
-.productCard a {
-  text-decoration: none;
-}
-
-/* Media query för skärmstorlek mindre än 600px */
 @media (max-width: 600px) {
-
   .container {
     grid-template-columns: repeat(2, 1fr);
     padding: 0px;

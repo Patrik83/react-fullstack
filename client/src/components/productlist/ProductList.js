@@ -8,11 +8,14 @@ const ProductList = ({ products }) => {
       {products.map((product) => (
         <article key={product.id} className={style.productCard}>
           <Link to={`/product/${product.id}`}>
-            <img src={`/images/${product.Images[0].imageUrl}`} alt={`Bild 1`} />
-              <div>
-                <h3>{product.name}</h3>
-                <p>{product.price} kr</p>
-              </div>
+            <img 
+              src={`/images/${product.Images[0].imageUrl}`} 
+              alt={`Bild på ${product.name}`}
+            />
+            <div>
+              <h3>{product.name}</h3>
+              <p>{product.price} kr</p>
+            </div>
           </Link>
         </article>
       ))}

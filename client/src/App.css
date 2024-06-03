@@ -7,7 +7,7 @@
 
 .navWrapper {
   display: grid;
-  grid-template-columns: 1fr auto; /* En kolumn för länkarna och en för kundvagnen */
+  grid-template-columns: 1fr auto 220px; /* En kolumn för länkarna och en för kundvagnen */
   align-items: center; /* Centrerar innehållet vertikalt */
   border: 1px solid black;
 }
@@ -38,7 +38,7 @@
   color: white;
 }
 
-/* Göm meny knappen på högre upplösningar */
+/* Göm meny knappen vid högre upplösningar */
 .topnav .menuIcon {
   display: none;
 }
@@ -49,6 +49,12 @@
 
  /* When the screen is less than 600 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
  @media screen and (max-width: 600px) {
+
+  .navWrapper {
+    grid-template-columns: 1fr auto; /* En kolumn för länkarna och en för kundvagnen */
+    border: 1px solid black;
+  }
+
   .topnav a {
     display: none;
   }

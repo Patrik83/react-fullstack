@@ -5,7 +5,7 @@ import style from "./CategoryList.module.css";
 const CategoryList = ({ products, categoryName }) => {
   return (
     <div>
-      <p style={{fontSize: "40px"}}>{categoryName}</p>
+      <h1>{categoryName}</h1>
         <main className={style.categoryWrapper}>
           {products.map((product) => (
             <article className={style.categoryCard} key={product.id} >
