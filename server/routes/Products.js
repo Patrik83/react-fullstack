@@ -1,26 +1,32 @@
 const express = require("express");
 const router = express.Router();
-const { Products, Images, Categories } = require("../models");
+const { Products, Images, Categories, ProductCategories } = require("../models");
 
-// Hämta alla produkter med dess bilder och eventuella kategorier
+/* *************************************************************** */
+/* ************************* GET PRODUCTS ************************ */
+/* *************************************************************** */
+
+// Hämta alla produkter (HomePage.js)
 router.get("/products", async (req, res) => {
+
   try {
-    const listOfProducts = await Products.findAll({ 
-      include: [{ model: Images }, { model: Categories }] // Inkludera tabellerna images och categories
+    const products = await Products.findAll({ 
+      include: [{ model: Images }, { model: Categories, as: 'Categories' }]
     });
-    res.json(listOfProducts);
+    res.json(products);
   } catch (error) {
     console.error("Error fetching products:", error);
     res.status(500).json({ error: "Could not fetch products" });
   }
 });
 
-// Hämta en specifik produkt med dess bilder och eventuella kategorier
+// Hämta en specifik produkt (ProductDetailPage.js)
 router.get("/products/:productId", async (req, res) => {
   const productId = req.params.productId;
+
   try {
     const product = await Products.findByPk(productId, { 
-      include: [{ model: Images }, { model: Categories }] // Inkludera tabellerna images och categories
+      include: [{ model: Images }, { model: Categories }]
     });
     res.json(product);
   } catch (error) {
@@ -29,29 +35,30 @@ router.get("/products/:productId", async (req, res) => {
   }
 });
 
-// Hämta alla kategorier
+// Hämta alla kategorier (search.js)
 router.get("/categories", async (req, res) => {
+
   try {
-    const listOfCategoryNames = await Categories.findAll({
-      attributes: ['name'], // Endast hämta namnen på kategorierna
+    const categories = await Categories.findAll({
+      attributes: ['name', 'id'],
     });
 
-    res.json(listOfCategoryNames);
+    res.json(categories);
   } catch (error) {
     console.error("Error fetching categories:", error);
     res.status(500).json({ error: "Could not fetch categories" });
   }
 });
 
-// Hämta produkter efter kategori
+// Hämta produkter efter kategori (används av ApiService.js till Search.js)
 router.get("/categories/:categoryName", async (req, res) => {
   const categoryName = req.params.categoryName;
-  console.log("Received category name:", categoryName);
+
   try {
     // Hämta alla produkter som tillhör den angivna kategorin från databasen
     const productsInCategory = await Products.findAll({
       include: [
-        { model: Categories, where: { name: categoryName } }, { model: Images }] // Inkludera tabellerna images och categories
+        { model: Categories, where: { name: categoryName } }, { model: Images }]
     });
     res.json(productsInCategory);
   } catch (error) {
@@ -60,27 +67,41 @@ router.get("/categories/:categoryName", async (req, res) => {
   }
 });
 
-// Hämta en specifik produkt inom en viss kategori
-router.get("/categories/:categoryName/:productName", async (req, res) => {
-  const { categoryName, productName } = req.params;
-  console.log("Received category name:", categoryName);
-  console.log("Received product name:", productName);
+/* *************************************************************** */
+/* *********************** UPDATE PRODUCTS *********************** */
+/* *************************************************************** */
+
+// Uppdaterar namn, pris och kategori genom admin sidan
+router.put("/products/:productId", async (req, res) => {
+  const { productId } = req.params;
+  const { name, price, categoryId } = req.body;
+
   try {
-    // Hämta den specifika produkten som tillhör den angivna kategorin från databasen
-    const product = await Products.findOne({
-      include: [
-        { 
-          model: Categories, 
-          where: { name: categoryName } 
-        }, 
-        { model: Images }
-      ],
-      where: { name: productName }
-    });
-    res.json(product);
+    // Uppdatera name och price i tabellen products
+    const productResult = await Products.update(
+      { name: name, price: price },
+      { where: { id: productId } }
+    );
+
+    // Kontrollera om produkten uppdaterades
+    if (productResult[0] === 0) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    // Uppdatera categoryId i tabellen product_categories
+    const categoryResult = await ProductCategories.update(
+      { categoryId: categoryId },
+      { where: { productId: productId } }
+    );
+
+    // Kontrollera om produktkategorin uppdaterades
+    if (categoryResult[0] === 0) {
+      return res.status(404).json({ error: "Product category not found" });
+    }
+
+    res.json({ message: "Product and category updated successfully" });
   } catch (error) {
-    console.error("Error fetching product from category:", error);
-    res.status(500).json({error: "Could not fetch product from category" });
+    res.status(500).json({ error: error.message });
   }
 });
 
